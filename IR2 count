@@ -1,0 +1,74 @@
+int irPin1 = 7,irPin2 = 6, red = 12 , blue = 13;
+int a = 0;
+int person = 0;
+int k;
+boolean state1 = true ;
+boolean state2 = true;
+boolean out = false;
+boolean in = false;
+void setup() {
+  pinMode(irPin2, INPUT);
+  pinMode(irPin1, INPUT);
+  pinMode(red, OUTPUT);
+  pinMode(blue, OUTPUT);
+  Serial.begin(9600);
+}
+  
+void loop() {
+  
+  int value1 = digitalRead(irPin1);
+  int value2 = digitalRead(irPin2);
+  
+/*  if(a == 0&& value1 == HIGH && value2 == HIGH){
+    digitalWrite(red, LOW);
+    digitalWrite(blue, LOW);
+    
+  }*/
+  if (a == 0 && state1 && value1 == LOW){
+   
+   a = 1;
+   state1 = false;
+  }
+  if ( a == 1 && state2 && value2 == LOW){
+    
+    digitalWrite(red, HIGH);
+    digitalWrite(blue, LOW);
+    person++;
+    Serial.print("방 안의 사람 수 : ");
+    Serial.println(person);
+   a = 0;
+   state2 = false;
+  }
+   if ( a == 0 && state2 && value2 == LOW) {
+  
+    a = 1;
+    state2 = false;
+  }
+  
+  
+  if ( a == 1 && state1 && value1 == LOW){
+  
+    digitalWrite(red, LOW);
+    digitalWrite(blue, HIGH);
+    person--;
+    if(person >= 1){
+    Serial.print("방 안의 사람 수 : ");
+    Serial.println(person);
+    }
+    a = 0;
+    state1 = false;
+  }
+    
+ 
+  if (person <= -1){
+    person = 0;
+    Serial.print("방 안의 사람 수 : ");
+    Serial.println(person);
+  }
+  if (digitalRead(irPin1)) {
+    state1 = true;
+  }
+  if (digitalRead(irPin2)) {
+    state2 = true;
+  }
+}
